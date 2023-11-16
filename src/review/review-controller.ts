@@ -1,9 +1,15 @@
-import { Route, Post } from "tsoa";
+import { Route, Post, Get } from "tsoa";
+import { Review } from "./review";
 
 @Route("reviews")
 export class ReviewController {
     @Post()
-    async addView(): Promise<void> {
+    async addReview(): Promise<void> {
         return;
+    }
+
+    @Get()
+    async getReviews(): Promise<Review[]> {
+        return [];
     }
 }
