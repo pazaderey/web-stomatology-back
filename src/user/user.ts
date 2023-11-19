@@ -4,7 +4,11 @@ export interface User {
     email: string;
     phone: string;
     requests: UserRequest[];
+    login: string;
+    password: string;
 }
+
+export type UserInfo = Omit<User, "requests" | "login" | "password">;
 
 export interface UserRequest {
     date: Date;

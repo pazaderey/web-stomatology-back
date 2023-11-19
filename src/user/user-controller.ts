@@ -1,6 +1,6 @@
 import { Route, Patch, Controller, Body, Get } from "tsoa";
 import UserService from "./user-service";
-import { User } from "./user";
+import { UserInfo } from "./user";
 
 /**
  *
@@ -17,7 +17,7 @@ export class userController extends Controller {
      * @returns
      */
     @Patch()
-    async save(@Body() user: Omit<User, "requests">): Promise<void> {
+    async save(@Body() user: UserInfo): Promise<void> {
         return this.service.saveUser(user);
     }
 
@@ -26,7 +26,7 @@ export class userController extends Controller {
      * @returns
      */
     @Get()
-    async getUser(): Promise<User> {
+    async getUser(): Promise<UserInfo> {
         return this.service.getUser();
     }
 }

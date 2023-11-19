@@ -1,7 +1,56 @@
-{
-    "name": "Иван Иванов",
-    "sex": "m",
-    "email": "ivanov@email.abc",
-    "phone": "+7-888-888-88-88",
-    "requests": []
-}
+[
+    {
+        "name": "Иван Иванов",
+        "sex": "m",
+        "email": "ivanov@email.abc",
+        "phone": "+7-888-888-88-88",
+        "requests": [],
+        "login": "ivanov",
+        "password": "123"
+    },
+    {
+        "name": "Мария Сидорова",
+        "sex": "f",
+        "email": "sidorova@email.abc",
+        "phone": "+7-888-888-88-87",
+        "requests": [],
+        "login": "sidorova",
+        "password": "123"
+    },
+    {
+        "name": "Петр Петров",
+        "sex": "m",
+        "email": "petrov@email.abc",
+        "phone": "+7-888-888-88-66",
+        "requests": [],
+        "login": "petrov",
+        "password": "123"
+    },
+    {
+        "name": "Андрей Иванов",
+        "sex": "m",
+        "email": "aivanov@email.abc",
+        "phone": "+7-888-888-88-58",
+        "requests": [],
+        "login": "ivanov_2",
+        "password": "123"
+    },
+    {
+        "name": "Alex Smith",
+        "sex": "f",
+        "email": "alexsmith@email.abc",
+        "phone": "+9-888-777-88-88",
+        "requests": [],
+        "login": "alexsmith",
+        "password": "123"
+    },
+    {
+        "name": "John Doe",
+        "sex": "m",
+        "email": "johndoe@email.abc",
+        "phone": "+7-888-555-88-88",
+        "requests": [],
+        "login": "johndoe",
+        "password": "123"
+    }
+]

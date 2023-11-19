@@ -18,7 +18,11 @@ export class AuthController extends Controller {
      */
     @Post("login")
     async login(@Body() authUser: UserAuthentication): Promise<void> {
-        return this.service.login(authUser);
+        try {
+            await this.service.login(authUser);
+        } catch (ex) {
+            this.setStatus(403);
+        }
     }
 
     /**

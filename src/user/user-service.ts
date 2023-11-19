@@ -1,4 +1,4 @@
-import { User } from "./user";
+import { UserInfo } from "./user";
 import path from "path";
 import { open } from "fs/promises";
 
@@ -11,7 +11,7 @@ export default class UserService {
      * @param user
      * @returns
      */
-    async saveUser(user: Omit<User, "requests">): Promise<void> {
+    async saveUser(user: UserInfo): Promise<void> {
         console.log(user);
         return;
     }
@@ -20,13 +20,13 @@ export default class UserService {
      *
      * @returns
      */
-    async getUser(): Promise<User> {
+    async getUser(): Promise<UserInfo> {
         const file = await open(
             path.join(__dirname, "../../../src/user/__mockdata__.json"),
         );
         const buffer = await file.readFile("utf-8");
 
         await file.close();
-        return JSON.parse(buffer);
+        return JSON.parse(buffer)[2];
     }
 }
