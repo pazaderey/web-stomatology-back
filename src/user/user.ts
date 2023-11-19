@@ -3,4 +3,11 @@ export interface User {
     sex: string;
     email: string;
     phone: string;
+    requests: UserRequest[];
+}
+
+export interface UserRequest {
+    date: Date;
+    text: string;
+    img: string;
 }
