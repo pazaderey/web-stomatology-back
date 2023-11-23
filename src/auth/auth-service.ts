@@ -1,7 +1,8 @@
-import { readFileSync } from "fs";
-import { UserAuthentication } from "./auth";
-import path from "path";
-import { User } from "src/user/user";
+import { CreateUser, UserAuthentication } from "./auth";
+import { User, UserService } from "../user";
+import * as bcrypt from "bcrypt";
+import * as crypto from "node:crypto";
+import * as jwt from "jsonwebtoken";
 
 /**
  *
@@ -10,29 +11,15 @@ export default class AuthService {
     /**
      *
      */
-    private readonly users: User[];
+    private readonly userService = UserService.getInstance();
 
-    constructor() {
-        this.users = JSON.parse(
-            readFileSync(
-                path.join(__dirname, "../../../src/user/__mockdata__.json"),
-                { encoding: "utf-8" },
-            ),
-        );
-    }
     /**
      *
      * @returns
      */
-    async login(authUser: UserAuthentication): Promise<void> {
-        const foundUser = this.users.find((u) => u.login === authUser.login);
-        if (foundUser === undefined) {
-            throw new Error("No user found");
-        }
-        if (foundUser.password !== authUser.password) {
-            throw new Error("Incorrect password");
-        }
-        return;
+    async login(authUser: UserAuthentication): Promise<string> {
+        const user = await this.validateUser(authUser);
+        return this.generateToken(user);
     }
 
     /**
@@ -40,7 +27,41 @@ export default class AuthService {
      * @returns
      */
     async invite(email: string): Promise<void> {
-        console.log(email);
-        return;
+        const password = crypto.randomBytes(10).toString("hex");
+        const hashed = await bcrypt.hash(password, 8);
+
+        const newUser: CreateUser = {
+            email,
+            login: email.split("@")[0],
+            password: hashed,
+        };
+
+        await this.userService.createUser(newUser);
+    }
+
+    /**
+     *
+     * @param user
+     */
+    private async generateToken(user: User) {
+        const payload = { username: user.name, userLogin: user.login };
+        return jwt.sign(payload, process.env.SECRET_TOKEN, { expiresIn: "1h" });
+    }
+
+    /**
+     *
+     * @param userAuth
+     * @returns
+     */
+    private async validateUser(userAuth: UserAuthentication): Promise<User> {
+        const user = await this.userService.getUser(userAuth.login);
+        if (user === undefined) {
+            throw new Error("User not found: " + userAuth.login);
+        }
+        const trueUser = await bcrypt.compare(userAuth.password, user.password);
+        if (trueUser) {
+            return user;
+        }
+        throw new Error("Incorrect password");
     }
 }

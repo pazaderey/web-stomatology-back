@@ -1,4 +1,4 @@
-import { Route, Post, Controller, Body, Query } from "tsoa";
+import { Route, Post, Controller, Body, Query, Security } from "tsoa";
 import AuthService from "./auth-service";
 import { UserAuthentication } from "./auth";
 
@@ -17,11 +17,15 @@ export class AuthController extends Controller {
      * @returns
      */
     @Post("login")
-    async login(@Body() authUser: UserAuthentication): Promise<void> {
+    async login(
+        @Body() authUser: UserAuthentication,
+    ): Promise<string | undefined> {
         try {
-            await this.service.login(authUser);
+            const token = await this.service.login(authUser);
+            return token;
         } catch (ex) {
             this.setStatus(403);
+            return;
         }
     }
 
@@ -29,6 +33,7 @@ export class AuthController extends Controller {
      *
      * @returns
      */
+    @Security("jwt")
     @Post("invite")
     async invite(@Query() email: string): Promise<void> {
         return this.service.invite(email);

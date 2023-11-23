@@ -25,9 +25,17 @@
                     }
                 }
             }
+        },
+        "securityDefinitions": {
+            "jwt": {
+                "type": "apiKey",
+                "in": "header",
+                "name": "x-access-token"
+            }
         }
     },
     "routes": {
-        "routesDir": "build"
+        "routesDir": "build",
+        "authenticationModule": "./src/auth/authentication.ts"
     }
 }

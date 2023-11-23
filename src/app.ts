@@ -10,8 +10,11 @@ import { ValidateError } from "tsoa";
 import { RegisterRoutes } from "../build/routes";
 import swagger from "swagger-ui-express";
 import * as swaggerDocument from "../build/swagger.json";
+import dotenv from "dotenv";
 
 export const app = express();
+
+dotenv.config({ path: "./.env" });
 
 app.use(urlencoded({ extended: true }));
 app.use(json());

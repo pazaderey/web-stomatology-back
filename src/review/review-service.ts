@@ -1,6 +1,8 @@
 import { CreateReview, Review } from "./review";
-import { readFileSync } from "fs";
+import { readFileSync, writeFileSync } from "fs";
 import path from "path";
+
+const FILE_PATH = path.join(__dirname, "../../../src/review/__mockdata__.json");
 
 /**
  *
@@ -16,10 +18,7 @@ export default class ReviewService {
      */
     constructor() {
         this.reviews = JSON.parse(
-            readFileSync(
-                path.join(__dirname, "../../../src/review/__mockdata__.json"),
-                { encoding: "utf-8" },
-            ),
+            readFileSync(FILE_PATH, { encoding: "utf-8" }),
         );
     }
     /**
@@ -40,6 +39,8 @@ export default class ReviewService {
         const { email: _, ...review } = createReview;
 
         this.reviews.push(review);
-        return;
+        writeFileSync(FILE_PATH, JSON.stringify(this.reviews), {
+            encoding: "utf-8",
+        });
     }
 }

@@ -8,7 +8,8 @@ export interface User {
     password: string;
 }
 
-export type UserInfo = Omit<User, "requests" | "login" | "password">;
+export type UserInfo = Pick<User, "login"> &
+    Partial<Omit<User, "password" | "requests">>;
 
 export interface UserRequest {
     date: Date;
