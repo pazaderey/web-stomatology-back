@@ -93,7 +93,7 @@ export default class UserService {
      *
      */
     private async writeToFile() {
-        await writeFile(usersPath, JSON.stringify(this.users), {
+        await writeFile(usersPath, JSON.stringify(this.users, null, 4), {
             encoding: "utf-8",
         });
     }

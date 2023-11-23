@@ -4,6 +4,7 @@ import * as jwt from "jsonwebtoken";
 export function expressAuthentication(
     request: express.Request,
     securityName: string,
+    scopes?: string[],
 ): Promise<string | jwt.JwtPayload | undefined> {
     if (securityName !== "jwt") {
         return Promise.reject("Incorrect token");

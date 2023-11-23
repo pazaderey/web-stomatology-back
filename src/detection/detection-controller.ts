@@ -1,4 +1,4 @@
-import { Route, Post, Controller } from "tsoa";
+import { Route, Post, Controller, Security, OperationId } from "tsoa";
 import DetectionService from "./detection-service";
 import { DetectionReport } from "./detection-report";
 
@@ -13,9 +13,11 @@ export class DetectionController extends Controller {
     private readonly service = new DetectionService();
 
     /**
-     *
-     * @returns
+     * @summary Get detection report
+     * @returns Detection report
      */
+    @OperationId("detect")
+    @Security("jwt")
     @Post()
     async detect(): Promise<DetectionReport> {
         return this.service.getReport();

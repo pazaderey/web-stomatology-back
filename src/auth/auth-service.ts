@@ -27,8 +27,10 @@ export default class AuthService {
      * @returns
      */
     async invite(email: string): Promise<void> {
-        const password = crypto.randomBytes(10).toString("hex");
-        const hashed = await bcrypt.hash(password, 8);
+        const password = crypto.randomBytes(10).toString("hex").slice(0, 10);
+        console.log(password);
+        const salt = await bcrypt.genSalt(8);
+        const hashed = await bcrypt.hash(password, salt);
 
         const newUser: CreateUser = {
             email,

@@ -1,4 +1,4 @@
-import { Route, Post, Get, Body, Controller, Security } from "tsoa";
+import { Route, Post, Get, Body, Controller, OperationId } from "tsoa";
 import { CreateReview, Review } from "./review";
 import ReviewService from "./review-service";
 
@@ -13,10 +13,10 @@ export class ReviewController extends Controller {
     private readonly reviewService = new ReviewService();
 
     /**
-     *
-     * @param review
+     * @summary Send review on moderation to post it
+     * @param review Review to post
      */
-    @Security("jwt")
+    @OperationId("addReview")
     @Post()
     async addReview(@Body() review: CreateReview): Promise<void> {
         this.setStatus(201);
@@ -24,10 +24,10 @@ export class ReviewController extends Controller {
     }
 
     /**
-     *
-     * @returns
+     * @summary Get all reviews from database
+     * @returns Array of reviews
      */
-    @Security("jwt")
+    @OperationId("getReviews")
     @Get()
     async getReviews(): Promise<Review[]> {
         return this.reviewService.getReviews();

@@ -7,22 +7,20 @@
     "spec": {
         "outputDirectory": "build",
         "specVersion": 3,
-        "spec": {
-            "paths": {
-                "/detection": {
-                    "post": {
-                        "consumes": [
-                            "multipart/form-data"
-                        ],
-                        "parameters": [
-                            {
-                                "in": "formData",
-                                "name": "detect-image",
-                                "required": true,
-                                "type": "file"
-                            }
-                        ]
-                    }
+        "paths": {
+            "/detection": {
+                "post": {
+                    "consumes": [
+                        "multipart/form-data"
+                    ],
+                    "parameters": [
+                        {
+                            "in": "formData",
+                            "name": "detect-image",
+                            "required": true,
+                            "type": "file"
+                        }
+                    ]
                 }
             }
         },
@@ -37,5 +35,8 @@
     "routes": {
         "routesDir": "build",
         "authenticationModule": "./src/auth/authentication.ts"
-    }
+    },
+    "ignore": [
+        "**/node_modules/**"
+    ]
 }

@@ -9,7 +9,7 @@ import cors from "cors";
 import { ValidateError } from "tsoa";
 import { RegisterRoutes } from "../build/routes";
 import swagger from "swagger-ui-express";
-import * as swaggerDocument from "../build/swagger.json";
+import swaggerDocument from "../build/swagger.json";
 import dotenv from "dotenv";
 
 export const app = express();

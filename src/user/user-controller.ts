@@ -1,4 +1,13 @@
-import { Route, Patch, Controller, Body, Get, Query, Security } from "tsoa";
+import {
+    Route,
+    Patch,
+    Controller,
+    Body,
+    Get,
+    Query,
+    Security,
+    OperationId,
+} from "tsoa";
 import UserService from "./user-service";
 import { UserInfo } from "./user";
 
@@ -13,9 +22,10 @@ export class userController extends Controller {
     private readonly service = UserService.getInstance();
 
     /**
-     *
-     * @returns
+     * @summary Save user data
+     * @param user User data
      */
+    @OperationId("saveUser")
     @Security("jwt")
     @Patch()
     async save(@Body() user: UserInfo): Promise<void> {
@@ -23,9 +33,11 @@ export class userController extends Controller {
     }
 
     /**
-     *
-     * @returns
+     * @summary Get user by login
+     * @param login User's login
+     * @returns UserInfo on success
      */
+    @OperationId("getUser")
     @Security("jwt")
     @Get()
     async getUser(
