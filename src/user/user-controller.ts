@@ -7,6 +7,7 @@ import {
     Query,
     Security,
     OperationId,
+    Response,
 } from "tsoa";
 import UserService from "./user-service";
 import { UserInfo } from "./user";
@@ -25,10 +26,12 @@ export class userController extends Controller {
      * @summary Save user data
      * @param user User data
      */
+    @Response(204, "Saved user")
     @OperationId("saveUser")
     @Security("jwt")
     @Patch()
     async save(@Body() user: UserInfo): Promise<void> {
+        this.setStatus(204);
         return this.service.saveUser(user);
     }
 
@@ -37,15 +40,17 @@ export class userController extends Controller {
      * @param login User's login
      * @returns UserInfo on success
      */
+    @Response(200, "User found")
+    @Response(404, "User not found")
     @OperationId("getUser")
     @Security("jwt")
     @Get()
     async getUser(
         @Query("login") login: string,
     ): Promise<UserInfo | undefined> {
-        const user = this.service.getUser(login);
+        const user = await this.service.getUser(login);
         if (!user) {
-            this.setStatus(403);
+            this.setStatus(404);
             return;
         }
         return user;

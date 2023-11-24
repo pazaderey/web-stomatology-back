@@ -4,6 +4,7 @@
     "controllerPathGlobs": [
         "src/**/*-controller.ts"
     ],
+    "specMerging": "recursive",
     "spec": {
         "outputDirectory": "build",
         "specVersion": 3,

@@ -11,8 +11,8 @@
     ],
     "root": true,
     "rules": {
-        "prettier/prettier" : 2,
-        "@typescript-eslint/no-unused-vars": "warn"
-
+        "prettier/prettier" : "warn",
+        "@typescript-eslint/no-unused-vars": "warn",
+        "@typescript-eslint/no-namespace": "off"
     }
 }

@@ -1,4 +1,12 @@
-import { Route, Post, Controller, Security, OperationId } from "tsoa";
+import {
+    Route,
+    Post,
+    Controller,
+    Security,
+    OperationId,
+    Response,
+    UploadedFile,
+} from "tsoa";
 import DetectionService from "./detection-service";
 import { DetectionReport } from "./detection-report";
 
@@ -16,10 +24,14 @@ export class DetectionController extends Controller {
      * @summary Get detection report
      * @returns Detection report
      */
+    @Response(200, "OK")
     @OperationId("detect")
     @Security("jwt")
     @Post()
-    async detect(): Promise<DetectionReport> {
+    async detect(
+        @UploadedFile("detect-image") file: Express.Multer.File,
+    ): Promise<DetectionReport> {
+        console.log(file.size);
         return this.service.getReport();
     }
 }
