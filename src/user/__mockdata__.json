@@ -1,0 +1,88 @@
+[
+    {
+        "name": "Иван Иванов",
+        "sex": "m",
+        "email": "ivanov@email.abc",
+        "phone": "+7-888-888-88-88",
+        "requests": [
+            {
+                "date": "03.03.2023",
+                "text": "opinion"
+            }
+        ],
+        "login": "ivanov",
+        "password": "$2b$10$6ac6XfKBRB1tGDXx5H6pTewHX47Byz4aDXTyXwES8xjxLKtlJSHXS"
+    },
+    {
+        "name": "Мария Сидорова",
+        "sex": "f",
+        "email": "sidorova@email.abc",
+        "phone": "+7-888-888-88-87",
+        "requests": [],
+        "login": "sidorova",
+        "password": "$2b$10$6ac6XfKBRB1tGDXx5H6pTewHX47Byz4aDXTyXwES8xjxLKtlJSHXS"
+    },
+    {
+        "name": "Петр Петров",
+        "sex": "m",
+        "email": "petrov@email.abc",
+        "phone": "+7-888-888-88-66",
+        "requests": [],
+        "login": "petrov",
+        "password": "$2b$10$6ac6XfKBRB1tGDXx5H6pTewHX47Byz4aDXTyXwES8xjxLKtlJSHXS"
+    },
+    {
+        "name": "Андрей Иванов",
+        "sex": "m",
+        "email": "aivanov@email.abc",
+        "phone": "+7-888-888-88-58",
+        "requests": [],
+        "login": "ivanov_2",
+        "password": "$2b$10$6ac6XfKBRB1tGDXx5H6pTewHX47Byz4aDXTyXwES8xjxLKtlJSHXS"
+    },
+    {
+        "name": "Alex Smith",
+        "sex": "f",
+        "email": "alexsmith@email.abc",
+        "phone": "+9-888-777-88-88",
+        "requests": [],
+        "login": "alexsmith",
+        "password": "$2b$10$6ac6XfKBRB1tGDXx5H6pTewHX47Byz4aDXTyXwES8xjxLKtlJSHXS"
+    },
+    {
+        "name": "John Doe",
+        "sex": "m",
+        "email": "johndoe@email.abc",
+        "phone": "+7-888-555-88-88",
+        "requests": [],
+        "login": "johndoe",
+        "password": "$2b$10$6ac6XfKBRB1tGDXx5H6pTewHX47Byz4aDXTyXwES8xjxLKtlJSHXS"
+    },
+    {
+        "email": "man@i.i",
+        "login": "man",
+        "password": "$2b$08$lCwxEbeaDL7DlwoseJQbkuCdcyv1tqEun9ALj5v8VQgbPyw4V0KPy",
+        "name": "Man Big",
+        "sex": "m",
+        "phone": "+7-888-658-88-87",
+        "requests": []
+    },
+    {
+        "email": "pzadieriei@mail.ru",
+        "login": "pzadieriei",
+        "password": "$2b$08$hG.lu2rMDSzgN2/NF4KbPOZxeKYpSnfTjrX4ILqDjDYKJPH3wrwLW",
+        "name": "Петр Задерей",
+        "sex": "m",
+        "phone": "+7 (965) 101-33-46",
+        "requests": []
+    },
+    {
+        "email": "adpiskunov@miem.hse.ru",
+        "login": "adpiskunov",
+        "password": "$2b$08$rggy7l2VSB1HrtbZ3fMqyuvOIuvA85TijYoQ5v6WOzsU//IpEHGzi",
+        "name": "asfsda",
+        "sex": "m",
+        "phone": "+7-888-658-88-87",
+        "requests": []
+    }
+]

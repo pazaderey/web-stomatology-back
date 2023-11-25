@@ -1,0 +1,43 @@
+{
+    "entryFile": "src/app.ts",
+    "noImplicitAdditionalProperties": "throw-on-extras",
+    "controllerPathGlobs": [
+        "src/**/*-controller.ts"
+    ],
+    "specMerging": "recursive",
+    "spec": {
+        "outputDirectory": "build",
+        "specVersion": 3,
+        "paths": {
+            "/detection": {
+                "post": {
+                    "consumes": [
+                        "multipart/form-data"
+                    ],
+                    "parameters": [
+                        {
+                            "in": "formData",
+                            "name": "detect-image",
+                            "required": true,
+                            "type": "file"
+                        }
+                    ]
+                }
+            }
+        },
+        "securityDefinitions": {
+            "jwt": {
+                "type": "apiKey",
+                "in": "header",
+                "name": "x-access-token"
+            }
+        }
+    },
+    "routes": {
+        "routesDir": "build",
+        "authenticationModule": "./src/auth/authentication.ts"
+    },
+    "ignore": [
+        "**/node_modules/**"
+    ]
+}
