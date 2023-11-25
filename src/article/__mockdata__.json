@@ -1,0 +1,38 @@
+[
+    {
+        "date": "13.07.2022",
+        "title": "Автоматическая AI-сегментация анатомических структур челюстно-лицевой области посредством КЛКТ снимка для исследования верхнего отдела дыхательных путей у пациентов с синдромом обструктивного апноэ сна (AI-based automatic segmentation of craniomaxillofacial anatomy from CBCT scans for automatic detection of pharyngeal airway evaluations in OSA patients)",
+        "authors": "K. Орхан (K. Orhan), М. Шамшиев (М. Shamshiev), М. Ежов (M.Ezhov), А. Плаксиг (A. Plaksin), А.Курбанова (A. Kurbanova), Г. Юнсал (G.Ünsal), М.Гусарев (M.Gusarev), М. Голицына (M.Golitsyna), С. Аксой (S.Aksoy), М.Мисирли (M. Misirli), Ф. Расмуссен (F. Rasmussen), Е. Шумилов (E. Shumilov), А. Сандерс (A.Sanders)",
+        "link": "https://www.nature.com/articles/s41598-022-15920-1"
+    },
+    {
+        "date": "22.07.2021",
+        "title": "Клинически применимая система искусственного интеллекта для стоматологической диагностики с помощью КЛКТ (Clinically applicable artificial intelligence system for dental diagnosis with CBCT)",
+        "authors": "М. Ежов (M.Ezhov), М. Гусарев (M. Gusarev), М. Голицына (M. Golitsyna), Ю.М. Ятесь (J.M. Yates), Е.Кушнерев (E. Kushnerev), Д. Тамими (D. Tamimi), С. Аксой (S. Aksoy), Е. Шумилов (E. Shumilov), А. Сандерс (A. Sanders) и K. Орхан (K. Orhan)",
+        "link": "https://www.nature.com/articles/s41598-021-94093-9"
+    },
+    {
+        "date": "19.05.2021",
+        "title": "Подход на основе глубоких нейронных сетей для планирования дентальной имплантации по конусно-лучевой компьютерной томографии (A deep learning approach for dental implant planning in cone-beam computed tomography images)",
+        "authors": "С. К. Байракдар (S. K. Bayrakdar), К. Орхан (K. Orhan), И. С. Байракдар (I. S. Bayrakdar), Э. Билгир (E. Bilgir), М. Ежов (M. Ezhov), М. Гусарев (M. Gusarev),Е. Шумилов (E. Shumilov)",
+        "link": "https://bmcmedimaging.biomedcentral.com/articles/10.1186/s12880-021-00618-z"
+    },
+    {
+        "date": "18.12.2020",
+        "title": "Оценка с помощью искусственного интеллекта при обнаружении ретенированных третьих моляров на конусно-лучевой компьютерной томографии (Evaluation of artificial intelligence for detecting impacted third molars on cone-beam computed tomography scans)",
+        "authors": "К. Орхан (K. Orhan), Э. Билгир (E. Bilgir), И. С.и Байракдар (I. S.i Bayrakdar), М. Ежов (M. Ezhov), М. Гусарев (M. Gusarev), Э. Шумилов (E. Shumilov)",
+        "link": "https://www.researchgate.net/publication/347538342_Evaluation_of_artificial_intelligence_for_detecting_impacted_third_molars_on_cone-beam_computed_tomography_scans"
+    },
+    {
+        "date": "20.01.2020",
+        "title": "Выявление периапикальных патологий с помощью искусственного интеллекта на снимках конусно-лучевой компьютерной томографии (Evaluation of artificial intelligence for detecting periapical pathosis on cone-beam computed tomography scans)",
+        "authors": "К. Орхан (K. Orhan), И. С. Байракдар (I. S. Bayrakdar), М. Ежов (M. Ezhov), А. Кравцов (A. Kravtsov), Т. Озюрек (T. Özyürek)",
+        "link": "https://onlinelibrary.wiley.com/doi/10.1111/iej.13265"
+    },
+    {
+        "date": "10.12.2019",
+        "title": "Применение искусственного интеллекта и глубоких нейронных сетей в стоматологической рентгенологии: развитие возможностей рентгенологии в медицинских учреждениях (Artificial Intelligence and Deep Learning in Dental Radiology: A Way Forward in Point of Care Radiology)",
+        "authors": "Jörg Mudrak, DMD, DDS",
+        "link": "https://www.oralhealthgroup.com/features/artificial-intelligence-and-deep-learning-in-dental-radiology-a-way-forward-in-point-of-care-radiology/"
+    }
+]

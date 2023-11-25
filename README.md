@@ -23,7 +23,7 @@ $ npm run build
 или
 
 ```bash
-$ yarn add
+$ yarn install
 $ yarn build
 ```
 

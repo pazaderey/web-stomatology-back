@@ -4,10 +4,12 @@
         "sex": "m",
         "email": "ivanov@email.abc",
         "phone": "+7-888-888-88-88",
-        "requests": [{
-            "date": "03.03.2023",
-            "text": "opinion"
-        }],
+        "requests": [
+            {
+                "date": "03.03.2023",
+                "text": "opinion"
+            }
+        ],
         "login": "ivanov",
         "password": "$2b$10$6ac6XfKBRB1tGDXx5H6pTewHX47Byz4aDXTyXwES8xjxLKtlJSHXS"
     },
@@ -61,6 +63,24 @@
         "login": "man",
         "password": "$2b$08$lCwxEbeaDL7DlwoseJQbkuCdcyv1tqEun9ALj5v8VQgbPyw4V0KPy",
         "name": "Man Big",
+        "sex": "m",
+        "phone": "+7-888-658-88-87",
+        "requests": []
+    },
+    {
+        "email": "pzadieriei@mail.ru",
+        "login": "pzadieriei",
+        "password": "$2b$08$hG.lu2rMDSzgN2/NF4KbPOZxeKYpSnfTjrX4ILqDjDYKJPH3wrwLW",
+        "name": "Петр Задерей",
+        "sex": "m",
+        "phone": "+7 (965) 101-33-46",
+        "requests": []
+    },
+    {
+        "email": "adpiskunov@miem.hse.ru",
+        "login": "adpiskunov",
+        "password": "$2b$08$rggy7l2VSB1HrtbZ3fMqyuvOIuvA85TijYoQ5v6WOzsU//IpEHGzi",
+        "name": "asfsda",
         "sex": "m",
         "phone": "+7-888-658-88-87",
         "requests": []
