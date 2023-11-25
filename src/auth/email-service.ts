@@ -58,7 +58,7 @@ export default class EmailService {
             },
         });
         const result = await transporter.sendMail({
-            from: "pazaderey@gmail.com",
+            from: process.env.EMAIL_USER,
             to,
             subject: "Dent.io Invitation",
             text: `

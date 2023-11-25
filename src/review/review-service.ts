@@ -1,5 +1,6 @@
 import { CreateReview, Review } from "./review";
-import { readFileSync, writeFileSync } from "fs";
+import { readFileSync } from "fs";
+import { writeFile } from "fs/promises";
 import path from "path";
 
 const FILE_PATH = path.join(__dirname, "../../../src/review/__mockdata__.json");
@@ -39,7 +40,7 @@ export default class ReviewService {
         const { email: _, ...review } = createReview;
 
         this.reviews.push(review);
-        writeFileSync(FILE_PATH, JSON.stringify(this.reviews), {
+        return writeFile(FILE_PATH, JSON.stringify(this.reviews, null, 4), {
             encoding: "utf-8",
         });
     }

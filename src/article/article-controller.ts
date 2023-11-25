@@ -13,8 +13,8 @@ export class ArticleController extends Controller {
     private readonly articleService = new ArticleService();
 
     /**
-     * @summary Get all reviews from database
-     * @returns Array of reviews
+     * @summary Get all articles from database
+     * @returns Array of articles
      */
     @Response(200, "Sent articles")
     @OperationId("getArticles")

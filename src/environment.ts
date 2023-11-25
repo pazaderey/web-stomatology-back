@@ -4,7 +4,6 @@ declare global {
             SECRET_TOKEN: string;
             PORT?: number;
             EMAIL_USER: string;
-            EMAIL_PASSWORD: string;
             CLIENT_ID: string;
             CLIENT_SECRET: string;
             REDIRECT_URI: string;
