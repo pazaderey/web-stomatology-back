@@ -1,10 +1,5 @@
-import { UserInfo, User } from "./user";
-import path from "path";
-import { readFileSync } from "fs";
-import { writeFile } from "fs/promises";
+import { UserInfo, User, UserModel } from "./schemas";
 import { CreateUser } from "src/auth/auth";
-
-const usersPath = path.join(__dirname, "../../../src/user/__mockdata__.json");
 
 /**
  *
@@ -18,21 +13,13 @@ export default class UserService {
     /**
      *
      */
-    private readonly users: User[];
+    private constructor() {}
 
     /**
      *
      */
-    private constructor() {
-        this.users = JSON.parse(readFileSync(usersPath, { encoding: "utf-8" }));
-    }
-
-    /**
-     *
-     * @returns
-     */
-    public static getInstance(): UserService {
-        if (!UserService.instance) {
+    public static getInstance() {
+        if (UserService.instance === undefined) {
             UserService.instance = new UserService();
         }
 
@@ -62,15 +49,16 @@ export default class UserService {
         if (user.sex) {
             foundUser.sex = user.sex;
         }
-        return this.writeToFile();
+        foundUser.save();
     }
 
     /**
      *
      * @returns
      */
-    async getUser(login: string): Promise<User | undefined> {
-        return this.users.find((u) => u.login === login);
+    async getUser(login: string) {
+        const found = await UserModel.findOne({ login });
+        return found;
     }
 
     /**
@@ -81,20 +69,11 @@ export default class UserService {
         const user: User = {
             ...createUser,
             name: "",
-            sex: "",
+            sex: "m",
             phone: "",
-            requests: [],
         };
-        this.users.push(user);
-        return this.writeToFile();
-    }
 
-    /**
-     *
-     */
-    private async writeToFile() {
-        await writeFile(usersPath, JSON.stringify(this.users, null, 4), {
-            encoding: "utf-8",
-        });
+        const newUser = new UserModel(user);
+        return newUser.save();
     }
 }

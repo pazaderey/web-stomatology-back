@@ -10,7 +10,7 @@ import {
     Response,
 } from "tsoa";
 import UserService from "./user-service";
-import { UserInfo } from "./user";
+import { UserInfo } from "./schemas";
 
 /**
  *

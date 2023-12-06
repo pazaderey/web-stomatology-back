@@ -1,27 +1,33 @@
-import Article from "./article";
-import { readFileSync } from "fs";
-import path from "path";
-
-const FILE_PATH = path.join(
-    __dirname,
-    "../../../src/article/__mockdata__.json",
-);
+import { ArticleModel } from "./schemas";
 
 export default class ArticleService {
-    private readonly articles: Article[];
     /**
      *
      */
-    constructor() {
-        this.articles = JSON.parse(
-            readFileSync(FILE_PATH, { encoding: "utf-8" }),
-        );
-    }
+    private static instance?: ArticleService;
+
+    /**
+     *
+     */
+    private constructor() {}
+
     /**
      *
      * @returns
      */
-    async getArticles(): Promise<Article[]> {
-        return this.articles;
+    public static getInstance(): ArticleService {
+        if (ArticleService.instance === undefined) {
+            ArticleService.instance = new ArticleService();
+        }
+
+        return ArticleService.instance;
+    }
+
+    /**
+     *
+     * @returns
+     */
+    async getArticles() {
+        return ArticleModel.find();
     }
 }

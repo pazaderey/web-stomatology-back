@@ -8,6 +8,8 @@ declare global {
             CLIENT_SECRET: string;
             REDIRECT_URI: string;
             REFRESH_TOKEN: string;
+            DB_HOST: string;
+            DB_PORT: number;
         }
     }
 }

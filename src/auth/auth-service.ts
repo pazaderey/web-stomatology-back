@@ -74,7 +74,7 @@ export default class AuthService {
      */
     private async validateUser(userAuth: UserAuthentication): Promise<User> {
         const user = await this.userService.getUser(userAuth.login);
-        if (user === undefined) {
+        if (user === null) {
             throw new Error("User not found: " + userAuth.login);
         }
         const trueUser = await bcrypt.compare(userAuth.password, user.password);

@@ -1,9 +1,4 @@
-import { CreateReview, Review } from "./review";
-import { readFileSync } from "fs";
-import { writeFile } from "fs/promises";
-import path from "path";
-
-const FILE_PATH = path.join(__dirname, "../../../src/review/__mockdata__.json");
+import { CreateReview, ReviewModel } from "./schemas";
 
 /**
  *
@@ -12,22 +7,31 @@ export default class ReviewService {
     /**
      *
      */
-    private readonly reviews: Review[];
+    private static instance?: ReviewService;
 
     /**
      *
      */
-    constructor() {
-        this.reviews = JSON.parse(
-            readFileSync(FILE_PATH, { encoding: "utf-8" }),
-        );
-    }
+    private constructor() {}
+
     /**
      *
      * @returns
      */
-    async getReviews(): Promise<Review[]> {
-        return this.reviews;
+    public static getInstance() {
+        if (ReviewService.instance === undefined) {
+            ReviewService.instance = new ReviewService();
+        }
+
+        return ReviewService.instance;
+    }
+
+    /**
+     *
+     * @returns
+     */
+    async getReviews() {
+        return ReviewModel.find();
     }
 
     /**
@@ -35,13 +39,11 @@ export default class ReviewService {
      * @param review
      * @returns
      */
-    async addReview(createReview: CreateReview): Promise<void> {
+    async addReview(createReview: CreateReview) {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { email: _, ...review } = createReview;
 
-        this.reviews.push(review);
-        return writeFile(FILE_PATH, JSON.stringify(this.reviews, null, 4), {
-            encoding: "utf-8",
-        });
+        const newReview = new ReviewModel(review);
+        return newReview.save();
     }
 }

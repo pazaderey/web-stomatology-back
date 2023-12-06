@@ -1,5 +1,4 @@
 import { Route, Get, Controller, OperationId, Response } from "tsoa";
-import Article from "./article";
 import ArticleService from "./article-service";
 
 /**
@@ -10,7 +9,7 @@ export class ArticleController extends Controller {
     /**
      *
      */
-    private readonly articleService = new ArticleService();
+    private readonly articleService = ArticleService.getInstance();
 
     /**
      * @summary Get all articles from database
@@ -19,7 +18,7 @@ export class ArticleController extends Controller {
     @Response(200, "Sent articles")
     @OperationId("getArticles")
     @Get()
-    async getArticles(): Promise<Article[]> {
+    async getArticles() {
         return this.articleService.getArticles();
     }
 }
