@@ -19,7 +19,7 @@ export class AuthController extends Controller {
     /**
      *
      */
-    private readonly service = new AuthService();
+    private readonly service = AuthService.getInstance();
 
     /**
      * @summary Try login and get authentication token

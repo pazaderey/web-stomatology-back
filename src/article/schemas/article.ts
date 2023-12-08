@@ -2,7 +2,7 @@ import { Schema, model } from "mongoose";
 
 const ArticleSchema = new Schema({
     date: {
-        type: Date,
+        type: String,
         required: true,
     },
     title: {
@@ -27,3 +27,5 @@ export interface Article {
     authors: string;
     text: string;
 }
+
+export type UpdateArticle = Partial<Article> & { id: string };

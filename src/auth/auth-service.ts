@@ -12,12 +12,27 @@ export default class AuthService {
     /**
      *
      */
-    private readonly userService = UserService.getInstance();
+    private static instance?: AuthService;
 
     /**
      *
      */
     private readonly emailService = EmailService.getInstance();
+
+    /**
+     *
+     */
+    private constructor() {}
+
+    /**
+     *
+     */
+    public static getInstance(): AuthService {
+        if (AuthService.instance === undefined) {
+            AuthService.instance = new AuthService();
+        }
+        return AuthService.instance;
+    }
 
     /**
      *
@@ -33,20 +48,23 @@ export default class AuthService {
      * @returns
      */
     async invite(email: string): Promise<void> {
-        const login = email.split("@")[0];
-        console.log("login: ", login);
+        const userService = await UserService.getInstance();
 
-        const foundUser = await this.userService.getUser(login);
-        if (foundUser !== undefined) {
-            console.error("User exists!");
+        let login = email.split("@")[0];
+
+        const foundUser = await userService.getUserByEmail(email);
+        if (foundUser) {
             return;
         }
-        console.log("user not found");
+
+        const foundUserCount = await userService.getUserCount(login);
+        if (foundUserCount !== 0) {
+            login = login + foundUserCount;
+        }
 
         const password = crypto.randomBytes(10).toString("hex").slice(0, 10);
         const salt = await bcrypt.genSalt(8);
         const hashed = await bcrypt.hash(password, salt);
-        console.log(email, login, password);
 
         const newUser: CreateUser = {
             email,
@@ -54,8 +72,8 @@ export default class AuthService {
             password: hashed,
         };
 
-        await this.userService.createUser(newUser);
-        console.log(await this.emailService.sendEmail(email, login, password));
+        await userService.createUser(newUser);
+        await this.emailService.sendEmail(email, login, password);
     }
 
     /**
@@ -64,7 +82,13 @@ export default class AuthService {
      */
     private async generateToken(user: User) {
         const payload = { username: user.name, userLogin: user.login };
-        return jwt.sign(payload, process.env.SECRET_TOKEN, { expiresIn: "1h" });
+
+        const token =
+            user.login === process.env.ADMIN_LOGIN
+                ? process.env.ADMIN_TOKEN
+                : process.env.SECRET_TOKEN;
+
+        return jwt.sign(payload, token, { expiresIn: "1h" });
     }
 
     /**
@@ -73,7 +97,9 @@ export default class AuthService {
      * @returns
      */
     private async validateUser(userAuth: UserAuthentication): Promise<User> {
-        const user = await this.userService.getUser(userAuth.login);
+        const userService = await UserService.getInstance();
+
+        const user = await userService.getUserByLogin(userAuth.login);
         if (user === null) {
             throw new Error("User not found: " + userAuth.login);
         }

@@ -15,7 +15,7 @@ const UserRequestSchema = new Schema({
         required: true,
     },
     img: {
-        type: Types.Buffer,
+        type: Buffer,
         contentType: String,
     },
 });

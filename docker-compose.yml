@@ -1,0 +1,27 @@
+version: '3.3'
+services:
+  mongodb:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    volumes:
+      - stomatology-data:/data/db
+
+  backend:
+    container_name: stomatology_back
+    build: ./web-stomatology-back
+    ports:
+      - "3000:3000"
+    depends_on:
+      - mongodb
+
+  frontend:
+    container_name: stomatology_front
+    build: ./web-stomatology
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+
+volumes:
+  stomatology-data:

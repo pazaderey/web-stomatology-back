@@ -2,6 +2,9 @@ declare global {
     namespace NodeJS {
         interface ProcessEnv {
             SECRET_TOKEN: string;
+            ADMIN_LOGIN: string;
+            ADMIN_PASSWORD: string;
+            ADMIN_TOKEN: string;
             PORT?: number;
             EMAIL_USER: string;
             CLIENT_ID: string;

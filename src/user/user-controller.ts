@@ -11,17 +11,13 @@ import {
 } from "tsoa";
 import UserService from "./user-service";
 import { UserInfo } from "./schemas";
+import { CreateUser } from "../auth/auth";
 
 /**
  *
  */
 @Route("user")
 export class userController extends Controller {
-    /**
-     *
-     */
-    private readonly service = UserService.getInstance();
-
     /**
      * @summary Save user data
      * @param user User data
@@ -31,8 +27,10 @@ export class userController extends Controller {
     @Security("jwt")
     @Patch()
     async save(@Body() user: UserInfo): Promise<void> {
+        const service = await UserService.getInstance();
+
         this.setStatus(204);
-        return this.service.saveUser(user);
+        return service.saveUser(user);
     }
 
     /**
@@ -48,11 +46,27 @@ export class userController extends Controller {
     async getUser(
         @Query("login") login: string,
     ): Promise<UserInfo | undefined> {
-        const user = await this.service.getUser(login);
+        const service = await UserService.getInstance();
+
+        const user = await service.getUserByLogin(login);
         if (!user) {
             this.setStatus(404);
             return;
         }
         return user;
+    }
+
+    /**
+     *
+     * @param user
+     * @returns
+     */
+    @Response(200, "Created user")
+    @OperationId("addUser")
+    @Security("jwt", ["admin"])
+    async addUser(@Body() user: CreateUser) {
+        const service = await UserService.getInstance();
+
+        return service.createUser(user);
     }
 }

@@ -18,12 +18,26 @@ export default class UserService {
     /**
      *
      */
-    public static getInstance() {
+    public static async getInstance() {
         if (UserService.instance === undefined) {
             UserService.instance = new UserService();
+            await UserService.instance.createUser({
+                login: process.env.ADMIN_LOGIN,
+                password: process.env.ADMIN_PASSWORD,
+                email: "admin@admin.admin",
+            });
         }
 
         return UserService.instance;
+    }
+
+    /**
+     *
+     * @returns
+     */
+    async getUserCount(login: string) {
+        const loginRegex = new RegExp(`^${login}`);
+        return (await UserModel.find({ login: loginRegex })).length;
     }
 
     /**
@@ -32,7 +46,7 @@ export default class UserService {
      * @returns
      */
     async saveUser(user: UserInfo): Promise<void> {
-        const foundUser = await this.getUser(user.login);
+        const foundUser = await this.getUserByLogin(user.login);
         if (!foundUser) {
             return;
         }
@@ -56,9 +70,17 @@ export default class UserService {
      *
      * @returns
      */
-    async getUser(login: string) {
-        const found = await UserModel.findOne({ login });
-        return found;
+    async getUserByLogin(login: string) {
+        return UserModel.findOne({ login });
+    }
+
+    /**
+     *
+     * @param email
+     * @returns
+     */
+    async getUserByEmail(email: string) {
+        return UserModel.findOne({ email });
     }
 
     /**

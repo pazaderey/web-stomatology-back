@@ -7,7 +7,7 @@ import {
     OperationId,
     Response,
 } from "tsoa";
-import { CreateReview, Review } from "./review";
+import { CreateReview, Review } from "./schemas";
 import ReviewService from "./review-service";
 
 /**
@@ -18,7 +18,7 @@ export class ReviewController extends Controller {
     /**
      *
      */
-    private readonly reviewService = new ReviewService();
+    private readonly reviewService = ReviewService.getInstance();
 
     /**
      * @summary Send review on moderation to post it
