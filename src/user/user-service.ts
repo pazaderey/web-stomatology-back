@@ -1,5 +1,4 @@
 import { UserInfo, User, UserModel } from "./schemas";
-import { CreateUser } from "src/auth/auth";
 
 /**
  *
@@ -18,14 +17,9 @@ export default class UserService {
     /**
      *
      */
-    public static async getInstance() {
+    public static getInstance() {
         if (UserService.instance === undefined) {
             UserService.instance = new UserService();
-            await UserService.instance.createUser({
-                login: process.env.ADMIN_LOGIN,
-                password: process.env.ADMIN_PASSWORD,
-                email: "admin@admin.admin",
-            });
         }
 
         return UserService.instance;
@@ -36,6 +30,11 @@ export default class UserService {
      * @returns
      */
     async getUserCount(login: string) {
+        console.log(
+            new Date().toLocaleTimeString() +
+                " [LOG] UserService.getUserCount with login: " +
+                login,
+        );
         const loginRegex = new RegExp(`^${login}`);
         return (await UserModel.find({ login: loginRegex })).length;
     }
@@ -46,8 +45,19 @@ export default class UserService {
      * @returns
      */
     async saveUser(user: UserInfo): Promise<void> {
+        console.log(
+            new Date().toLocaleTimeString() +
+                " [LOG] UserService.saveUser with user: " +
+                JSON.stringify(user),
+        );
+
         const foundUser = await this.getUserByLogin(user.login);
         if (!foundUser) {
+            console.log(
+                new Date().toLocaleTimeString() +
+                    " [LOG] UserService.saveUser user not found user: " +
+                    JSON.stringify(user),
+            );
             return;
         }
 
@@ -71,6 +81,12 @@ export default class UserService {
      * @returns
      */
     async getUserByLogin(login: string) {
+        console.log(
+            new Date().toLocaleTimeString() +
+                " [LOG] UserService.getUserByLogin with login: " +
+                login,
+        );
+
         return UserModel.findOne({ login });
     }
 
@@ -80,22 +96,63 @@ export default class UserService {
      * @returns
      */
     async getUserByEmail(email: string) {
+        console.log(
+            new Date().toLocaleTimeString() +
+                " [LOG] UserService.getUserByEmail with email: " +
+                email,
+        );
+
         return UserModel.findOne({ email });
     }
 
     /**
-     *
+     * Creates empty user
      * @param createUser
+     * @returns user's password
      */
-    async createUser(createUser: CreateUser) {
+    async createUser(
+        login: string,
+        email?: string,
+        password?: string,
+    ): Promise<string | null> {
+        console.log(
+            new Date().toLocaleTimeString() +
+                " [LOG] UserService.createUser with params: \n" +
+                `login: ${login} ` +
+                `email: ${email} `,
+        );
+
+        const foundUser = await this.getUserByLogin(login);
+        if (foundUser !== null) {
+            console.log(
+                new Date().toLocaleTimeString() +
+                    " [LOG] UserService.createUser user already exists with login: " +
+                    login,
+            );
+            return null;
+        }
+
+        const [userPassword, hashed] =
+            await UserModel.generatePassword(password);
+
         const user: User = {
-            ...createUser,
+            email: email ?? "",
+            login,
+            password: hashed,
             name: "",
             sex: "m",
             phone: "",
         };
 
         const newUser = new UserModel(user);
-        return newUser.save();
+        await newUser.save();
+
+        console.log(
+            new Date().toLocaleTimeString() +
+                " [LOG] UserService.createUser user created: " +
+                JSON.stringify(user),
+        );
+
+        return userPassword;
     }
 }

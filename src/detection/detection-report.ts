@@ -1,1 +1,3 @@
-export interface DetectionReport {}
+export interface DetectionReport {
+    text: string;
+}

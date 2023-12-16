@@ -9,6 +9,7 @@ import {
     Delete,
     Patch,
     Path,
+    Body,
 } from "tsoa";
 import ArticleService from "./article-service";
 import { Article } from "./schemas";
@@ -35,44 +36,46 @@ export class ArticleController extends Controller {
     }
 
     /**
-     *
-     * @param id
-     * @returns
+     * @summary Get one article by id
+     * @param id Article ID
+     * @returns Found Article
      */
     @Response(200, "Sent articles")
+    @Response(404, "Article not found")
     @OperationId("getArticle")
     @Security("jwt", ["admin"])
     @Get("{id}")
     async getArticle(@Path("id") id: string): Promise<Article> {
         const article = await this.articleService.getArticleById(id);
         if (article === null) {
+            this.setStatus(404);
             throw new Error("Article not found, id: " + id);
         }
         return {
             title: article.title,
             authors: article.authors,
             date: article.date,
-            text: article.text,
+            link: article.link,
         };
     }
 
     /**
-     *
-     * @param article
-     * @returns
+     * Create one article
+     * @param article Article schema
+     * @returns New article's id
      */
     @Response(201, "Created")
     @OperationId("addArticle")
     @Security("jwt", ["admin"])
     @Post()
-    async addArticle(article: Article) {
+    async addArticle(@Body() article: Article) {
         return this.articleService.addArticle(article);
     }
 
     /**
-     *
-     * @param id
-     * @returns
+     * Delete one article by id
+     * @param id Article id
+     * @returns Delete result
      */
     @Response(200, "Deleted")
     @OperationId("removeArticle")
@@ -83,9 +86,10 @@ export class ArticleController extends Controller {
     }
 
     /**
-     *
-     * @param id
-     * @param articleParts
+     * Update one article
+     * @param id Article id
+     * @param articleParts Article schema
+     * @returns void
      */
     @Response(204, "Updated")
     @OperationId("updateArticle")
@@ -93,7 +97,7 @@ export class ArticleController extends Controller {
     @Patch("{id}")
     async updateArticle(
         @Path("id") id: string,
-        articleParts: Partial<Article>,
+        @Body() articleParts: Partial<Article>,
     ) {
         const newArticle = { ...articleParts, id };
         await this.articleService.updateArticle(newArticle);

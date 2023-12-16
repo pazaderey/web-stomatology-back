@@ -16,7 +16,14 @@ async function init() {
         `mongodb://${process.env.DB_HOST}:${process.env.DB_PORT}`,
     );
 
-    await UserService.getInstance();
+    const userService = UserService.getInstance();
+    await userService.createUser(
+        process.env.ADMIN_LOGIN,
+        undefined,
+        process.env.ADMIN_PASSWORD,
+    );
+    console.log(new Date().toLocaleTimeString() + " [LOG] admin user created");
+
     AuthService.getInstance();
     DetectionService.getInstance();
     ArticleService.getInstance();
@@ -26,6 +33,6 @@ async function init() {
 
 init().then(() =>
     app.listen(PORT, () => {
-        console.log(`Started on ${PORT}`);
+        console.log(new Date().getTime() + ` [LOG] Started on ${PORT}`);
     }),
 );

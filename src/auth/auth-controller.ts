@@ -52,7 +52,6 @@ export class AuthController extends Controller {
     @Security("jwt")
     @Post("invite")
     async invite(@Query() email: string): Promise<void> {
-        console.log("got email: ", email);
         await this.service.invite(email);
     }
 }

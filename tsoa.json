@@ -8,6 +8,7 @@
     "spec": {
         "outputDirectory": "build",
         "specVersion": 3,
+        "basePath": "v1",
         "paths": {
             "/detection": {
                 "post": {
@@ -35,6 +36,7 @@
     },
     "routes": {
         "routesDir": "build",
+        "basePath": "v1",
         "authenticationModule": "./src/auth/authentication.ts"
     },
     "ignore": [

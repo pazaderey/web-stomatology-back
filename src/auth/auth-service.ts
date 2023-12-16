@@ -1,7 +1,6 @@
-import { CreateUser, UserAuthentication } from "./auth";
+import { UserAuthentication } from "./auth";
 import { User, UserService } from "../user";
 import * as bcrypt from "bcrypt";
-import * as crypto from "node:crypto";
 import * as jwt from "jsonwebtoken";
 import EmailService from "./email-service";
 
@@ -18,6 +17,11 @@ export default class AuthService {
      *
      */
     private readonly emailService = EmailService.getInstance();
+
+    /**
+     *
+     */
+    private readonly userService = UserService.getInstance();
 
     /**
      *
@@ -39,6 +43,12 @@ export default class AuthService {
      * @returns
      */
     async login(authUser: UserAuthentication): Promise<string> {
+        console.log(
+            new Date().toLocaleTimeString() +
+                " [LOG] AuthService.login with login: " +
+                authUser.login,
+        );
+
         const user = await this.validateUser(authUser);
         return this.generateToken(user);
     }
@@ -48,31 +58,28 @@ export default class AuthService {
      * @returns
      */
     async invite(email: string): Promise<void> {
-        const userService = await UserService.getInstance();
+        console.log(
+            new Date().toLocaleTimeString() +
+                " [LOG] AuthService.invite with email:" +
+                email,
+        );
 
         let login = email.split("@")[0];
 
-        const foundUser = await userService.getUserByEmail(email);
+        const foundUser = await this.userService.getUserByEmail(email);
         if (foundUser) {
             return;
         }
 
-        const foundUserCount = await userService.getUserCount(login);
+        const foundUserCount = await this.userService.getUserCount(login);
         if (foundUserCount !== 0) {
             login = login + foundUserCount;
         }
 
-        const password = crypto.randomBytes(10).toString("hex").slice(0, 10);
-        const salt = await bcrypt.genSalt(8);
-        const hashed = await bcrypt.hash(password, salt);
-
-        const newUser: CreateUser = {
-            email,
-            login,
-            password: hashed,
-        };
-
-        await userService.createUser(newUser);
+        const password = await this.userService.createUser(email, login);
+        if (password === null) {
+            return;
+        }
         await this.emailService.sendEmail(email, login, password);
     }
 
@@ -81,12 +88,24 @@ export default class AuthService {
      * @param user
      */
     private async generateToken(user: User) {
-        const payload = { username: user.name, userLogin: user.login };
+        console.log(
+            new Date().toLocaleTimeString() +
+                " [LOG] AuthService.generateToken for user: " +
+                JSON.stringify(user),
+        );
+
+        const payload = { userLogin: user.login };
 
         const token =
             user.login === process.env.ADMIN_LOGIN
                 ? process.env.ADMIN_TOKEN
                 : process.env.SECRET_TOKEN;
+
+        console.log(
+            new Date().toLocaleTimeString() +
+                " [LOG] AuthService.generateToken token generated: " +
+                JSON.stringify(user),
+        );
 
         return jwt.sign(payload, token, { expiresIn: "1h" });
     }
@@ -97,16 +116,42 @@ export default class AuthService {
      * @returns
      */
     private async validateUser(userAuth: UserAuthentication): Promise<User> {
-        const userService = await UserService.getInstance();
+        console.log(
+            new Date().toLocaleTimeString() +
+                " [LOG] AuthService.validateUser for login: " +
+                userAuth.login,
+        );
 
-        const user = await userService.getUserByLogin(userAuth.login);
+        const user = await this.userService.getUserByLogin(userAuth.login);
         if (user === null) {
+            console.log(
+                new Date().toLocaleTimeString() +
+                    " [LOG] AuthService.validateUser user not found: " +
+                    JSON.stringify(user),
+            );
             throw new Error("User not found: " + userAuth.login);
         }
+        console.log(
+            new Date().toLocaleTimeString() +
+                " [LOG] AuthService.generateToken user found: " +
+                JSON.stringify(user),
+        );
+
         const trueUser = await bcrypt.compare(userAuth.password, user.password);
         if (trueUser) {
+            console.log(
+                new Date().toLocaleTimeString() +
+                    " [LOG] AuthService.generateToken correct password: " +
+                    JSON.stringify(user),
+            );
             return user;
         }
+
+        console.log(
+            new Date().toLocaleTimeString() +
+                " [LOG] AuthService.generateToken incorrect password: " +
+                JSON.stringify(user),
+        );
         throw new Error("Incorrect password");
     }
 }

@@ -13,7 +13,7 @@ const ArticleSchema = new Schema({
         type: String,
         required: true,
     },
-    text: {
+    link: {
         type: String,
         required: true,
     },
@@ -25,7 +25,7 @@ export interface Article {
     date: string;
     title: string;
     authors: string;
-    text: string;
+    link: string;
 }
 
 export type UpdateArticle = Partial<Article> & { id: string };

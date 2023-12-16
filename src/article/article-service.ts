@@ -28,6 +28,10 @@ export default class ArticleService {
      * @returns
      */
     async getArticles() {
+        console.log(
+            new Date().toLocaleTimeString() +
+                " [LOG] ArticleService.getArticles",
+        );
         return ArticleModel.find();
     }
 
@@ -37,6 +41,11 @@ export default class ArticleService {
      * @returns
      */
     async getArticleById(id: string) {
+        console.log(
+            new Date().toLocaleTimeString() +
+                " [LOG] ArticleService.getArticleById with id: " +
+                id,
+        );
         return ArticleModel.findById(id);
     }
 
@@ -46,6 +55,11 @@ export default class ArticleService {
      * @returns
      */
     async addArticle(article: Article) {
+        console.log(
+            new Date().toLocaleTimeString() +
+                " [LOG] ArticleService.addArticle with article: " +
+                JSON.stringify(article),
+        );
         const newArticle = new ArticleModel(article);
         return (await newArticle.save()).id as string;
     }
@@ -56,6 +70,11 @@ export default class ArticleService {
      * @returns
      */
     async removeArticle(articleId: string) {
+        console.log(
+            new Date().toLocaleTimeString() +
+                " [LOG] ArticleService.removeArticle with id: " +
+                articleId,
+        );
         return ArticleModel.deleteOne({ _id: articleId });
     }
 
@@ -65,6 +84,11 @@ export default class ArticleService {
      * @returns
      */
     async updateArticle(article: UpdateArticle) {
+        console.log(
+            new Date().toLocaleTimeString() +
+                " [LOG] ArticleService.updateArticle with article: " +
+                JSON.stringify(article),
+        );
         const exists = await ArticleModel.findById(article.id);
         if (exists === null) {
             return null;
@@ -78,8 +102,8 @@ export default class ArticleService {
         if (article.date) {
             exists.date = article.date;
         }
-        if (article.text) {
-            exists.text = article.text;
+        if (article.link) {
+            exists.link = article.link;
         }
         return exists.save();
     }

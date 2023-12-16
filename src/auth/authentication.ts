@@ -14,7 +14,7 @@ export function expressAuthentication(
     scopes?: string[],
 ): Promise<string | jwt.JwtPayload | undefined> {
     if (securityName !== "jwt") {
-        return Promise.reject("Incorrect token");
+        return Promise.reject("Incorrect authentication type");
     }
 
     const token = request.headers["x-access-token"];
@@ -22,15 +22,23 @@ export function expressAuthentication(
         return Promise.reject("Incorrect token");
     }
 
-    let verifyToken = process.env.SECRET_TOKEN;
-    if (scopes && scopes.includes("admin")) {
-        verifyToken = process.env.ADMIN_TOKEN;
+    let secretTokens: string[];
+    if (scopes && scopes.length === 1 && scopes[0] === "admin") {
+        secretTokens = [process.env.ADMIN_TOKEN];
+    } else {
+        secretTokens = [process.env.ADMIN_TOKEN, process.env.SECRET_TOKEN];
     }
+    return Promise.any(secretTokens.map((s) => jwtVerify(token, s)));
+}
 
+function jwtVerify(
+    token: string,
+    secret: string,
+): Promise<string | jwt.JwtPayload | undefined> {
     return new Promise((resolve, reject) => {
         jwt.verify(
             token,
-            verifyToken,
+            secret,
             (
                 err: jwt.VerifyErrors | null,
                 decoded?: string | jwt.JwtPayload,
