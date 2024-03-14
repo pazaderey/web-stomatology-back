@@ -1,5 +1,11 @@
 version: '3.3'
 services:
+  detection:
+    container_name: stomatology_detection
+    build: ./web-stomatology-detect
+    ports:
+      - "80:80"
+
   mongodb:
     image: mongo:latest
     ports:
@@ -14,6 +20,7 @@ services:
       - "80:80"
     depends_on:
       - mongodb
+      - detection
 
   frontend:
     container_name: stomatology_front

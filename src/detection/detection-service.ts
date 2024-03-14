@@ -1,5 +1,6 @@
 import { DetectionReport } from "./detection-report";
 import { UserRequestModel, UserService } from "../user";
+import http from "node:http";
 
 /**
  *
@@ -9,20 +10,6 @@ export default class DetectionService {
      *
      */
     private static instance?: DetectionService;
-
-    /**
-     *
-     */
-    private readonly aiService = {
-        processImage(image: Buffer) {
-            return new Promise<string>((resolve) => {
-                setTimeout(
-                    () => resolve("Image size is: " + image.byteLength),
-                    3000,
-                );
-            });
-        },
-    };
 
     /**
      *
@@ -53,9 +40,7 @@ export default class DetectionService {
         file: Express.Multer.File,
         login?: string,
     ): Promise<DetectionReport> {
-        console.log(file.size, login);
-
-        const report = await this.aiService.processImage(file.buffer);
+        const report = await this.sendRequest(file);
         if (login === undefined) {
             return {
                 text: report,
@@ -76,5 +61,34 @@ export default class DetectionService {
         return {
             text: report,
         };
+    }
+
+    /**
+     *
+     * @param data
+     * @returns
+     */
+    private async sendRequest(data: any): Promise<void> {
+        return new Promise((resolve, reject) => {
+            const request = http.request(
+                {
+                    host: process.env.DETECTION_HOST,
+                    port: process.env.DETECTION_PORT,
+                    path: "/detect-service",
+                    method: "GET",
+                },
+                (response) => {
+                    response.on("end", () => {
+                        resolve();
+                    });
+
+                    response.on("error", () => {
+                        reject();
+                    });
+                },
+            );
+            request.write(data);
+            request.end();
+        });
     }
 }

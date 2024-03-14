@@ -13,6 +13,8 @@ declare global {
             REFRESH_TOKEN: string;
             DB_HOST: string;
             DB_PORT: number;
+            DETECTION_HOST: string;
+            DETECTION_PORT: number;
         }
     }
 }
