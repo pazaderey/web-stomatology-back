@@ -8,6 +8,7 @@ import {
     Security,
     OperationId,
     Response,
+    Post,
 } from "tsoa";
 import UserService from "./user-service";
 import { UserInfo } from "./schemas";
@@ -63,6 +64,7 @@ export class userController extends Controller {
     @Response(422, "User already exists")
     @OperationId("addUser")
     @Security("jwt", ["admin"])
+    @Post()
     async addUser(@Query("login") login: string) {
         try {
             const result = await this.service.createUser(login);
@@ -70,6 +72,8 @@ export class userController extends Controller {
                 this.setStatus(422);
                 return;
             }
+            this.setStatus(200);
+            return result;
         } catch (err) {
             this.setStatus(500);
             throw new Error("Something went wrong: " + err);

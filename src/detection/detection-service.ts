@@ -1,6 +1,5 @@
-import { DetectionReport } from "./detection-report";
+import { DetectionReport } from "./schemas/detection-report";
 import { UserRequestModel, UserService } from "../user";
-import http from "node:http";
 
 /**
  *
@@ -10,6 +9,16 @@ export default class DetectionService {
      *
      */
     private static instance?: DetectionService;
+
+    /**
+     *
+     */
+    private static readonly requestUrl = new URL(process.env.DETECTION_HOST);
+
+    static {
+        DetectionService.requestUrl.port =
+            process.env.DETECTION_PORT.toString(10);
+    }
 
     /**
      *
@@ -40,11 +49,15 @@ export default class DetectionService {
         file: Express.Multer.File,
         login?: string,
     ): Promise<DetectionReport> {
-        const report = await this.sendRequest(file);
+        const fileBytes = new Uint8Array(file.buffer);
+        const responseBuffer = await this.sendRequest(fileBytes);
+
+        const detectionReport: DetectionReport = {
+            responseImage: Buffer.from(responseBuffer),
+        };
+
         if (login === undefined) {
-            return {
-                text: report,
-            };
+            return detectionReport;
         }
 
         const user = await this.userService.getUserByLogin(login);
@@ -52,15 +65,13 @@ export default class DetectionService {
             const request = new UserRequestModel({
                 user,
                 date: new Date(),
-                text: report,
-                img: file.buffer,
+                requestImage: file.buffer,
+                detectionReport,
             });
 
             await request.save();
         }
-        return {
-            text: report,
-        };
+        return detectionReport;
     }
 
     /**
@@ -68,27 +79,16 @@ export default class DetectionService {
      * @param data
      * @returns
      */
-    private async sendRequest(data: any): Promise<void> {
-        return new Promise((resolve, reject) => {
-            const request = http.request(
-                {
-                    host: process.env.DETECTION_HOST,
-                    port: process.env.DETECTION_PORT,
-                    path: "/detect-service",
-                    method: "GET",
-                },
-                (response) => {
-                    response.on("end", () => {
-                        resolve();
-                    });
-
-                    response.on("error", () => {
-                        reject();
-                    });
-                },
-            );
-            request.write(data);
-            request.end();
+    private async sendRequest(data: Uint8Array): Promise<ArrayBuffer> {
+        const request = await fetch(DetectionService.requestUrl, {
+            method: "GET",
+            headers: {
+                "Content-Type": "image/png",
+                "Content-Length": data.byteLength.toString(10),
+            },
+            body: data.buffer,
         });
+
+        return request.arrayBuffer();
     }
 }

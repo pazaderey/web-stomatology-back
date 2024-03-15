@@ -1,5 +1,6 @@
 import { Schema, model, Types } from "mongoose";
 import { User } from "./user";
+import { DetectionReport } from "src/detection";
 
 const UserRequestSchema = new Schema({
     user: {
@@ -10,13 +11,13 @@ const UserRequestSchema = new Schema({
         type: Date,
         required: true,
     },
-    text: {
-        type: String,
-        required: true,
-    },
-    img: {
+    requestImage: {
         type: Buffer,
         contentType: String,
+    },
+    detectionReport: {
+        type: Types.ObjectId,
+        ref: "DetectionReport",
     },
 });
 
@@ -25,6 +26,6 @@ export const UserRequestModel = model("UserRequest", UserRequestSchema);
 export interface UserRequest {
     user: User;
     date: Date;
-    text: string;
-    img: string;
+    requestImage: Buffer;
+    detectionReport: DetectionReport;
 }

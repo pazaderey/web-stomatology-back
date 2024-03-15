@@ -8,7 +8,7 @@ import {
     FormField,
 } from "tsoa";
 import DetectionService from "./detection-service";
-import { DetectionReport } from "./detection-report";
+import { DetectionReport } from "./schemas/detection-report";
 
 /**
  *
@@ -31,6 +31,11 @@ export class DetectionController extends Controller {
         @UploadedFile("detect-image") file: Express.Multer.File,
         @FormField("user-login") userLogin?: string,
     ): Promise<DetectionReport> {
-        return this.service.getReport(file, userLogin);
+        try {
+            return this.service.getReport(file, userLogin);
+        } catch (err) {
+            this.setStatus(500);
+            throw new Error("Something went wrong: " + err);
+        }
     }
 }
