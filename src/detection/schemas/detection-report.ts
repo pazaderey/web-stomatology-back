@@ -1,9 +1,10 @@
 import { Schema, model } from "mongoose";
 
 const DetectionReportSchema = new Schema({
-    responseImage: {
+    response_image: {
         type: Buffer,
         contentType: String,
+        required: true,
     },
 });
 

@@ -2,6 +2,11 @@
 
 Представляет собой серверную часть приложения `Dent.io`.
 
+> [!WARNING]
+> Этот репозиторий является бэкенд частью приложения, остальные части:
+> 1. https://github.com/pazaderey/web-stomatology
+> 1. https://github.com/pazaderey/web-stomatology-detect
+
 ## Требования
 
 Для запуска потребуется Node.js версии 19 и выше.
@@ -24,6 +29,10 @@
 |CLIENT_SECRET|Client SECRET для Google OAuth|-|
 |REDIRECT_URI|Redirect URI для Google OAuth|-|
 |REFRESH_TOKEN|Refresh Token для Google OAuth|-|
+|DB_HOST|Адрес базы данных|localhost|
+|DB_PORT|Порт базы данных|27017|
+|DETECTION_HOST|Адрес сервера с сервисом детекции|localhost|
+|DETECTION_PORT|Порт сервера с сервисом детекции|5000|
 
 ## Сборка
 

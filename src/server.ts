@@ -7,11 +7,13 @@ import { ArticleService } from "./article";
 import dotenv from "dotenv";
 import path from "path";
 import mongoose from "mongoose";
+import assertIsValidEnv from "./assert-is-valid-env";
 
 dotenv.config({ path: path.join(__dirname, "../../.env") });
-const PORT = process.env.PORT || 3000;
 
 async function init() {
+    assertIsValidEnv(process.env);
+
     await mongoose.connect(
         `mongodb://${process.env.DB_HOST}:${process.env.DB_PORT}`,
     );
@@ -32,7 +34,9 @@ async function init() {
 }
 
 init().then(() =>
-    app.listen(PORT, () => {
-        console.log(new Date().getTime() + ` [LOG] Started on ${PORT}`);
+    app.listen(process.env.PORT, () => {
+        console.log(
+            new Date().getTime() + ` [LOG] Started on ${process.env.PORT}`,
+        );
     }),
 );

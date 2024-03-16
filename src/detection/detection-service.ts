@@ -1,4 +1,7 @@
-import { DetectionReport } from "./schemas/detection-report";
+import {
+    DetectionReport,
+    DetectionReportModel,
+} from "./schemas/detection-report";
 import { UserRequestModel, UserService } from "../user";
 
 /**
@@ -13,12 +16,7 @@ export default class DetectionService {
     /**
      *
      */
-    private static readonly requestUrl = new URL(process.env.DETECTION_HOST);
-
-    static {
-        DetectionService.requestUrl.port =
-            process.env.DETECTION_PORT.toString(10);
-    }
+    private static readonly requestUrl = `${process.env.DETECTION_HOST}:${process.env.DETECTION_PORT}`;
 
     /**
      *
@@ -41,6 +39,7 @@ export default class DetectionService {
 
         return DetectionService.instance;
     }
+
     /**
      *
      * @returns
@@ -48,30 +47,43 @@ export default class DetectionService {
     async getReport(
         file: Express.Multer.File,
         login?: string,
-    ): Promise<DetectionReport> {
+    ): Promise<DetectionReport | null> {
+        const request = new UserRequestModel({
+            date: new Date(),
+            requestImage: file.buffer,
+        });
+
         const fileBytes = new Uint8Array(file.buffer);
         const responseBuffer = await this.sendRequest(fileBytes);
 
-        const detectionReport: DetectionReport = {
-            responseImage: Buffer.from(responseBuffer),
-        };
+        if (responseBuffer === null) {
+            await request.save();
+            return null;
+        }
+
+        const nodeBuffer = Buffer.from(responseBuffer);
+
+        const detectionReport = new DetectionReportModel({
+            response_image: nodeBuffer,
+        });
+
+        request.set("detection_report", detectionReport);
 
         if (login === undefined) {
-            return detectionReport;
+            await request.save();
+            return {
+                responseImage: nodeBuffer,
+            };
         }
 
         const user = await this.userService.getUserByLogin(login);
         if (user !== null) {
-            const request = new UserRequestModel({
-                user,
-                date: new Date(),
-                requestImage: file.buffer,
-                detectionReport,
-            });
-
+            request.set("user", user);
             await request.save();
         }
-        return detectionReport;
+        return {
+            responseImage: nodeBuffer,
+        };
     }
 
     /**
@@ -79,7 +91,7 @@ export default class DetectionService {
      * @param data
      * @returns
      */
-    private async sendRequest(data: Uint8Array): Promise<ArrayBuffer> {
+    private async sendRequest(data: Uint8Array): Promise<ArrayBuffer | null> {
         const request = await fetch(DetectionService.requestUrl, {
             method: "GET",
             headers: {
@@ -87,8 +99,11 @@ export default class DetectionService {
                 "Content-Length": data.byteLength.toString(10),
             },
             body: data.buffer,
+        }).catch((err) => {
+            console.error("Detecting went wrong: " + err);
+            return null;
         });
 
-        return request.arrayBuffer();
+        return request ? request.arrayBuffer() : null;
     }
 }

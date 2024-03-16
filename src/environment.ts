@@ -5,7 +5,7 @@ declare global {
             ADMIN_LOGIN: string;
             ADMIN_PASSWORD: string;
             ADMIN_TOKEN: string;
-            PORT?: number;
+            PORT: number;
             EMAIL_USER: string;
             CLIENT_ID: string;
             CLIENT_SECRET: string;

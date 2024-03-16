@@ -11,11 +11,12 @@ const UserRequestSchema = new Schema({
         type: Date,
         required: true,
     },
-    requestImage: {
+    image: {
         type: Buffer,
         contentType: String,
+        required: true,
     },
-    detectionReport: {
+    detection_report: {
         type: Types.ObjectId,
         ref: "DetectionReport",
     },
