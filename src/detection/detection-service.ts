@@ -16,7 +16,7 @@ export default class DetectionService {
     /**
      *
      */
-    private static readonly requestUrl = `${process.env.DETECTION_HOST}:${process.env.DETECTION_PORT}`;
+    private static readonly requestUrl = `http://${process.env.DETECTION_HOST}:${process.env.DETECTION_PORT}/detect-service`;
 
     /**
      *
@@ -50,7 +50,7 @@ export default class DetectionService {
     ): Promise<DetectionReport | null> {
         const request = new UserRequestModel({
             date: new Date(),
-            requestImage: file.buffer,
+            image: file.buffer,
         });
 
         const fileBytes = new Uint8Array(file.buffer);
@@ -93,7 +93,7 @@ export default class DetectionService {
      */
     private async sendRequest(data: Uint8Array): Promise<ArrayBuffer | null> {
         const request = await fetch(DetectionService.requestUrl, {
-            method: "GET",
+            method: "POST",
             headers: {
                 "Content-Type": "image/png",
                 "Content-Length": data.byteLength.toString(10),

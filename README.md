@@ -65,3 +65,7 @@ $ yarn start
 ```
 
 Приложение запустится на порту, который был указан в файле `.env`. Если не указан, то на порту 3000.
+
+## Информация по запуску всего приложения Dent.io:
+
+`https://docs.google.com/document/d/1i4GIkbJKEVj9n70dh_jYP9fDIeFmd9nRPMgAyGNhB_k/edit?usp=sharing`

@@ -32,7 +32,12 @@ export class DetectionController extends Controller {
         @FormField("user-login") userLogin?: string,
     ): Promise<DetectionReport> {
         try {
-            return this.service.getReport(file, userLogin);
+            const report = await this.service.getReport(file, userLogin);
+            if (report === null) {
+                this.setStatus(500);
+                throw new Error("Detection went wrong");
+            }
+            return report;
         } catch (err) {
             this.setStatus(500);
             throw new Error("Something went wrong: " + err);
