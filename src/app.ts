@@ -11,6 +11,7 @@ import { RegisterRoutes } from "../build/routes";
 import swagger from "swagger-ui-express";
 import swaggerDocument from "../build/swagger.json";
 
+console.log(20);
 export const app = express();
 
 app.use(urlencoded({ extended: true }));

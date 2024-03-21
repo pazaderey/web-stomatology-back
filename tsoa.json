@@ -22,7 +22,20 @@
                             "required": true,
                             "type": "file"
                         }
-                    ]
+                    ],
+                    "responses": {
+                        "200": {
+                            "description": "OK",
+                            "content": {
+                                "image/png": {
+                                    "schema": {
+                                        "type": "string",
+                                        "format": "byte"
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
             }
         },

@@ -1,32 +1,48 @@
 import { Schema, model, Types } from "mongoose";
-import { User } from "./user";
-import { DetectionReport } from "src/detection";
+import { DetectionReportModel } from "../../detection";
 
-const UserRequestSchema = new Schema({
-    user: {
-        type: Types.ObjectId,
-        ref: "User",
+const UserRequestSchema = new Schema(
+    {
+        user: {
+            type: Types.ObjectId,
+            ref: "User",
+        },
+        date: {
+            type: Date,
+            required: true,
+        },
+        image: {
+            type: Buffer,
+            contentType: String,
+            required: true,
+        },
+        detection_report: {
+            type: Types.ObjectId,
+            ref: "DetectionReport",
+        },
     },
-    date: {
-        type: Date,
-        required: true,
+    {
+        methods: {
+            async toUserRequest(): Promise<UserRequest> {
+                const detectionReport = await DetectionReportModel.findById(
+                    this.detection_report?.prototype,
+                );
+                return {
+                    date: this.date,
+                    requestImage: this.image.toString("base64"),
+                    detectionReportImage: detectionReport
+                        ? detectionReport.response_image.toString("base64")
+                        : undefined,
+                };
+            },
+        },
     },
-    image: {
-        type: Buffer,
-        contentType: String,
-        required: true,
-    },
-    detection_report: {
-        type: Types.ObjectId,
-        ref: "DetectionReport",
-    },
-});
+);
 
 export const UserRequestModel = model("UserRequest", UserRequestSchema);
 
 export interface UserRequest {
-    user: User;
     date: Date;
-    requestImage: Buffer;
-    detectionReport: DetectionReport;
+    requestImage: string;
+    detectionReportImage?: string;
 }

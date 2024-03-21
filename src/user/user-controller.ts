@@ -11,7 +11,7 @@ import {
     Post,
 } from "tsoa";
 import UserService from "./user-service";
-import { UserInfo } from "./schemas";
+import { UserEntity, UserInfo } from "./schemas";
 
 /**
  *
@@ -31,7 +31,7 @@ export class userController extends Controller {
     @OperationId("saveUser")
     @Security("jwt")
     @Patch()
-    async save(@Body() user: UserInfo): Promise<void> {
+    async save(@Body() user: UserEntity): Promise<void> {
         this.setStatus(204);
         return this.service.saveUser(user);
     }
@@ -44,10 +44,29 @@ export class userController extends Controller {
     @Response(200, "User found")
     @Response(404, "User not found")
     @OperationId("getUser")
-    @Security("jwt")
+    //@Security("jwt")
     @Get()
-    async getUser(@Query("login") login: string) {
+    async getUser(@Query("login") login: string): Promise<UserEntity | void> {
         const user = await this.service.getUserByLogin(login);
+        if (user === null) {
+            this.setStatus(404);
+            return;
+        }
+        return user.toUserEntity();
+    }
+
+    /**
+     * @summary Get user info by login
+     * @param login User's login
+     * @returns UserInfo on success
+     */
+    @Response(200, "User found")
+    @Response(404, "User not found")
+    @OperationId("getUserInfo")
+    //@Security("jwt")
+    @Get("/info")
+    async getUserInfo(@Query("login") login: string): Promise<UserInfo | void> {
+        const user = await this.service.getUserFullInfo(login);
         if (user === null) {
             this.setStatus(404);
             return;

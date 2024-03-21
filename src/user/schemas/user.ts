@@ -1,6 +1,7 @@
 import { Schema, model } from "mongoose";
 import * as bcrypt from "bcrypt";
 import * as crypto from "node:crypto";
+import { UserRequest } from "./user-request";
 
 const UserSchema = new Schema(
     {
@@ -30,6 +31,17 @@ const UserSchema = new Schema(
                 return [userPassword, hashed];
             },
         },
+        methods: {
+            toUserEntity(): UserEntity {
+                return {
+                    name: this.name,
+                    sex: this.sex,
+                    email: this.email,
+                    phone: this.phone,
+                    login: this.login,
+                };
+            },
+        },
     },
 );
 
@@ -44,5 +56,8 @@ export interface User {
     password: string;
 }
 
-export type UserInfo = Pick<User, "login"> &
-    Omit<User, "password" | "requests">;
+export type UserEntity = Omit<User, "password">;
+
+export type UserInfo = UserEntity & {
+    userRequests: Array<Omit<UserRequest, "user">>;
+};

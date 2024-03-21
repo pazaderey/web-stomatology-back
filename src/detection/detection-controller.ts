@@ -6,9 +6,10 @@ import {
     Response,
     UploadedFile,
     FormField,
+    Request,
 } from "tsoa";
+import { Request as ExRequest } from "express";
 import DetectionService from "./detection-service";
-import { DetectionReport } from "./schemas/detection-report";
 
 /**
  *
@@ -29,15 +30,20 @@ export class DetectionController extends Controller {
     @Post()
     async detect(
         @UploadedFile("detect-image") file: Express.Multer.File,
+        @Request() request: ExRequest,
         @FormField("user-login") userLogin?: string,
-    ): Promise<DetectionReport> {
+    ) {
         try {
             const report = await this.service.getReport(file, userLogin);
             if (report === null) {
                 this.setStatus(500);
                 throw new Error("Detection went wrong");
             }
-            return report;
+            const realBuffer = new Uint8Array(report.responseImage).buffer;
+            request.res
+                ?.setHeader("content-length", realBuffer.byteLength)
+                ?.setHeader("content-type", "image/png")
+                ?.send(realBuffer);
         } catch (err) {
             this.setStatus(500);
             throw new Error("Something went wrong: " + err);

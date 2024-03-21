@@ -1,4 +1,11 @@
-import { UserInfo, User, UserModel } from "./schemas";
+import {
+    UserEntity,
+    User,
+    UserModel,
+    UserInfo,
+    UserRequestModel,
+    UserRequest,
+} from "./schemas";
 
 /**
  *
@@ -44,7 +51,7 @@ export default class UserService {
      * @param user
      * @returns
      */
-    async saveUser(user: UserInfo): Promise<void> {
+    async saveUser(user: UserEntity): Promise<void> {
         console.log(
             new Date().toLocaleTimeString() +
                 " [LOG] UserService.saveUser with user: " +
@@ -106,6 +113,23 @@ export default class UserService {
     }
 
     /**
+     *
+     * @param login
+     */
+    async getUserFullInfo(login: string): Promise<UserInfo | null> {
+        const user = await this.getUserByLogin(login);
+        if (!user) {
+            return null;
+        }
+
+        const userRequests = await this.getUserRequests(user);
+        return {
+            ...user.toUserEntity(),
+            userRequests,
+        };
+    }
+
+    /**
      * Creates empty user
      * @param createUser
      * @returns user's password
@@ -154,5 +178,14 @@ export default class UserService {
         );
 
         return userPassword;
+    }
+
+    async getUserRequests(user: User): Promise<Array<UserRequest>> {
+        const requestsQuery = await UserRequestModel.find({ user });
+        if (requestsQuery.length < 1) {
+            return [];
+        }
+
+        return Promise.all(requestsQuery.map((r) => r.toUserRequest()));
     }
 }

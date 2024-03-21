@@ -24,11 +24,11 @@ export default function assertIsValidEnv(env: NodeJS.ProcessEnv): void {
     }
 
     if (env.DETECTION_HOST === undefined) {
-        env.DB_HOST = "localhost";
+        env.DETECTION_HOST = "localhost";
     }
 
     if (env.DETECTION_PORT === undefined) {
-        env.DB_PORT = 5000;
+        env.DETECTION_PORT = 5000;
     }
 
     const missing: string[] = [];
