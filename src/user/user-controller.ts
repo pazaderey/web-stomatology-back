@@ -44,7 +44,7 @@ export class userController extends Controller {
     @Response(200, "User found")
     @Response(404, "User not found")
     @OperationId("getUser")
-    //@Security("jwt")
+    @Security("jwt")
     @Get()
     async getUser(@Query("login") login: string): Promise<UserEntity | void> {
         const user = await this.service.getUserByLogin(login);
@@ -63,7 +63,7 @@ export class userController extends Controller {
     @Response(200, "User found")
     @Response(404, "User not found")
     @OperationId("getUserInfo")
-    //@Security("jwt")
+    @Security("jwt")
     @Get("/info")
     async getUserInfo(@Query("login") login: string): Promise<UserInfo | void> {
         const user = await this.service.getUserFullInfo(login);

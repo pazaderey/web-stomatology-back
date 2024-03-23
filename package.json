@@ -1,7 +1,7 @@
 {
   "name": "web-stomatology-back",
-  "version": "1.0.0",
-  "main": "dist/app.js",
+  "version": "2.0.0",
+  "main": "build/src/app.js",
   "repository": "https://github.com/pazaderey/web-stomatology-back.git",
   "author": "Petr <pazaderey@edu.hse.ru>",
   "license": "UNLICENSED",

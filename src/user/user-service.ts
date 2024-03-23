@@ -122,10 +122,12 @@ export default class UserService {
             return null;
         }
 
-        const userRequests = await this.getUserRequests(user);
+        const userRequests = await this.getUserRequests(user, true);
         return {
             ...user.toUserEntity(),
-            userRequests,
+            userRequests: userRequests
+                .map((r) => UserRequestModel.encode(r))
+                .toSorted((a, b) => b.date.valueOf() - a.date.valueOf()),
         };
     }
 
@@ -180,12 +182,21 @@ export default class UserService {
         return userPassword;
     }
 
-    async getUserRequests(user: User): Promise<Array<UserRequest>> {
+    /**
+     *
+     * @param user
+     * @param compress
+     * @returns
+     */
+    async getUserRequests(
+        user: User,
+        compress: boolean,
+    ): Promise<Array<UserRequest>> {
         const requestsQuery = await UserRequestModel.find({ user });
         if (requestsQuery.length < 1) {
             return [];
         }
 
-        return Promise.all(requestsQuery.map((r) => r.toUserRequest()));
+        return Promise.all(requestsQuery.map((r) => r.toUserRequest(compress)));
     }
 }

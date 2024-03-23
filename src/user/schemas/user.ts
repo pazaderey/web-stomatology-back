@@ -1,7 +1,7 @@
 import { Schema, model } from "mongoose";
 import * as bcrypt from "bcrypt";
 import * as crypto from "node:crypto";
-import { UserRequest } from "./user-request";
+import { UserRequestEncoded } from "./user-request";
 
 const UserSchema = new Schema(
     {
@@ -59,5 +59,5 @@ export interface User {
 export type UserEntity = Omit<User, "password">;
 
 export type UserInfo = UserEntity & {
-    userRequests: Array<Omit<UserRequest, "user">>;
+    userRequests: Array<UserRequestEncoded>;
 };

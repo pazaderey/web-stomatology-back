@@ -1,7 +1,3 @@
-import {
-    DetectionReport,
-    DetectionReportModel,
-} from "./schemas/detection-report";
 import { UserRequestModel, UserService } from "../user";
 
 /**
@@ -47,7 +43,7 @@ export default class DetectionService {
     async getReport(
         file: Express.Multer.File,
         login?: string,
-    ): Promise<DetectionReport | null> {
+    ): Promise<Buffer | null> {
         const request = new UserRequestModel({
             date: new Date(),
             image: file.buffer,
@@ -63,17 +59,11 @@ export default class DetectionService {
 
         const nodeBuffer = Buffer.from(responseBuffer);
 
-        const detectionReport = new DetectionReportModel({
-            response_image: nodeBuffer,
-        });
-
-        request.set("detection_report", detectionReport);
+        request.set("detection_report_image", nodeBuffer);
 
         if (login === undefined) {
             await request.save();
-            return {
-                responseImage: nodeBuffer,
-            };
+            return nodeBuffer;
         }
 
         const user = await this.userService.getUserByLogin(login);
@@ -81,9 +71,41 @@ export default class DetectionService {
             request.set("user", user);
             await request.save();
         }
-        return {
-            responseImage: nodeBuffer,
-        };
+        return nodeBuffer;
+    }
+
+    /**
+     *
+     * @param login
+     * @param date
+     */
+    async getOriginal(login: string, date: string) {
+        const user = await this.userService.getUserByLogin(login);
+        if (user === null) {
+            return null;
+        }
+
+        const userRequests = await this.userService.getUserRequests(
+            user,
+            false,
+        );
+
+        if (userRequests.length < 1) {
+            return null;
+        }
+
+        const foundRequest = userRequests.find(
+            (r) => r.date.toLocaleString() === date,
+        );
+
+        if (
+            foundRequest === undefined ||
+            foundRequest.detectionReportImage === undefined
+        ) {
+            return null;
+        }
+
+        return foundRequest.detectionReportImage;
     }
 
     /**

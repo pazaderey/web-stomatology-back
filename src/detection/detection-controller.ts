@@ -5,10 +5,9 @@ import {
     OperationId,
     Response,
     UploadedFile,
-    FormField,
-    Request,
+    Get,
+    Query,
 } from "tsoa";
-import { Request as ExRequest } from "express";
 import DetectionService from "./detection-service";
 
 /**
@@ -30,8 +29,7 @@ export class DetectionController extends Controller {
     @Post()
     async detect(
         @UploadedFile("detect-image") file: Express.Multer.File,
-        @Request() request: ExRequest,
-        @FormField("user-login") userLogin?: string,
+        @Query("login") userLogin?: string,
     ) {
         try {
             const report = await this.service.getReport(file, userLogin);
@@ -39,11 +37,43 @@ export class DetectionController extends Controller {
                 this.setStatus(500);
                 throw new Error("Detection went wrong");
             }
-            const realBuffer = new Uint8Array(report.responseImage).buffer;
-            request.res
-                ?.setHeader("content-length", realBuffer.byteLength)
-                ?.setHeader("content-type", "image/png")
-                ?.send(realBuffer);
+
+            this.setStatus(200);
+            this.setHeader("content-type", "image/png");
+
+            // TSOA не умеет отправлять буфферы, приходится кодировать
+            // https://github.com/lukeautry/tsoa/issues/1128
+            return report.toString("base64");
+        } catch (err) {
+            this.setStatus(500);
+            throw new Error("Something went wrong: " + err);
+        }
+    }
+
+    /**
+     *
+     * @param login
+     * @param date
+     */
+    @Response(200, "OK")
+    @OperationId("getFullImage")
+    @Get()
+    async getFullImage(
+        @Query("login") login: string,
+        @Query("date") date: string,
+    ) {
+        try {
+            const original = await this.service.getOriginal(login, date);
+            if (original === null) {
+                this.setStatus(404);
+                return;
+            }
+            this.setStatus(200);
+            this.setHeader("content-type", "image/png");
+
+            // TSOA не умеет отправлять буфферы, приходится кодировать
+            // https://github.com/lukeautry/tsoa/issues/1128
+            return original.toString("base64");
         } catch (err) {
             this.setStatus(500);
             throw new Error("Something went wrong: " + err);

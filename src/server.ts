@@ -12,7 +12,6 @@ import assertIsValidEnv from "./assert-is-valid-env";
 dotenv.config({ path: path.join(__dirname, "..", "..", ".env") });
 
 async function init() {
-    console.log(1);
     assertIsValidEnv(process.env);
     await mongoose.connect(
         `mongodb://${process.env.DB_HOST}:${process.env.DB_PORT}`,

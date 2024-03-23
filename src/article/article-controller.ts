@@ -69,7 +69,10 @@ export class ArticleController extends Controller {
     @Security("jwt", ["admin"])
     @Post()
     async addArticle(@Body() article: Article) {
-        return this.articleService.addArticle(article);
+        return this.articleService.addArticle(article).then((id) => {
+            this.setStatus(201);
+            return id;
+        });
     }
 
     /**
@@ -100,6 +103,9 @@ export class ArticleController extends Controller {
         @Body() articleParts: Partial<Article>,
     ) {
         const newArticle = { ...articleParts, id };
-        await this.articleService.updateArticle(newArticle);
+        await this.articleService.updateArticle(newArticle).then((art) => {
+            this.setStatus(204);
+            return art;
+        });
     }
 }

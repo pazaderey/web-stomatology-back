@@ -42,6 +42,7 @@
 
 ```bash
 $ npm install
+$ npm install --os=[ваша OS] --cpu=[ваш CPU] --libc=[подходящая libc] sharp
 $ npm run build
 ```
 
@@ -49,6 +50,9 @@ $ npm run build
 
 ```bash
 $ yarn install
+$ yarn config set os [ваша OS]
+$ yarn config set cpu [ваш CPU]
+$ yarn config set libc [подходящая libc]
 $ yarn build
 ```
 
